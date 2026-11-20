@@ -1,42 +1,42 @@
-# TonVanity — GPU-генератор TON-адресов
+# TonVanity — GPU TON address generator
 
 ![TonVanity](screenshot.png)
 
-Генератор TON-адресов на CUDA, OpenCL и CPU. Поддерживает seed-фразы из 12 и 24 слов, кошельки W5, V4R2 и TGWallet.
+TON address generator for CUDA, OpenCL and CPU. Supports 12- and 24-word seed phrases and W5, V4R2 and TGWallet wallets.
 
-## ⚠️ Безопасность
+## ⚠️ Security
 
-- Приложение работает полностью офлайн и не делает сетевых запросов.
-- Seed-фразы и приватные ключи не покидают ваш ПК.
-- Найденные адреса и сид-фразы сохраняются только локально — в `found.txt` рядом с приложением.
+- The application runs fully offline and makes no network requests.
+- Seed phrases and private keys never leave your PC.
+- Found addresses and seed phrases are stored locally only — in `found.txt` next to the application.
 
-## Возможности
+## Features
 
-- Бэкенды: CUDA (sm_75/86/89/120), OpenCL и CPU.
-- Режимы: CPU, CPU+GPU, GPU only.
-- Seed-фразы: 12 или 24 слова.
-- Кошельки: W5, V4R2, TGWallet.
-- Форматы адресов: UQ (non-bounceable) и EQ (bounceable).
-- Поиск по окончанию адреса, с учётом регистра.
-- Статистика: попытки, время, фраз/с, адресов/с.
+- Backends: CUDA (sm_75/86/89/120), OpenCL and CPU.
+- Modes: CPU, CPU+GPU, GPU only.
+- Seed phrases: 12 or 24 words.
+- Wallets: W5, V4R2, TGWallet.
+- Address formats: UQ (non-bounceable) and EQ (bounceable).
+- Suffix search with an optional case-sensitive match.
+- Stats: attempts, elapsed time, phrases/s, addresses/s.
 
-## Запуск
+## Run
 
-Windows 10/11 x64. Установка .NET и Windows App SDK не требуется — сборка self-contained.
+Windows 10/11 x64. No .NET or Windows App SDK installation required — the build is self-contained.
 
-- Консоль: [TonVanity.exe](TonVanity.exe)
+- Console: [TonVanity.exe](TonVanity.exe)
 - GUI: [TonVanity WinUI/TonVanity.exe](TonVanity%20WinUI/TonVanity.exe)
 
-## Сборка
+## Build
 
-Исходники — в ветке [source](https://github.com/QuirkyTroll/TonVanity/tree/source).
+Sources are in the [source](https://github.com/QuirkyTroll/TonVanity/tree/source) branch.
 
-Требования:
+Requirements:
 
-- [.NET 8 SDK](https://dotnet.microsoft.com/download/dotnet/8.0) — для WinUI 3.
+- [.NET 8 SDK](https://dotnet.microsoft.com/download/dotnet/8.0) — for WinUI 3.
 - [CUDA Toolkit 12.x](https://developer.nvidia.com/cuda-downloads) — `nvrtc`, `nvcc`/`ptxas`, `cudart64_12.dll`.
-- MinGW-w64 ([w64devkit](https://github.com/skeeto/w64devkit)) — `g++` и `windres`.
-- Python 3 — для бутстрапа тулчейна.
+- MinGW-w64 ([w64devkit](https://github.com/skeeto/w64devkit)) — `g++` and `windres`.
+- Python 3 — for toolchain bootstrap.
 
 ```powershell
 git clone -b source https://github.com/QuirkyTroll/TonVanity.git TonVanity-src
@@ -44,8 +44,8 @@ cd TonVanity-src
 .\build.ps1
 ```
 
-Первый запуск — с интернетом; повторная сборка — `.\build.ps1 -Offline`. Скрипт собирает `tonvanity.dll`, консольный `TonVanity.exe` и WinUI 3 UI в соседнюю папку `TonVanity/`.
+The first run requires internet access; rebuild with `.\build.ps1 -Offline`. The script builds `tonvanity.dll`, the console `TonVanity.exe` and the WinUI 3 UI into the sibling `TonVanity/` folder.
 
-## Лицензия
+## License
 
-MIT — см. [LICENSE](LICENSE).
+MIT — see [LICENSE](LICENSE).
