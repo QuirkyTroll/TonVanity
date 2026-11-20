@@ -20,6 +20,17 @@ TON address generator for CUDA, OpenCL and CPU. Supports 12- and 24-word seed ph
 - Suffix search with an optional case-sensitive match.
 - Stats: attempts, elapsed time, phrases/s, addresses/s.
 
+## Performance
+
+Measured on an NVIDIA GeForce RTX 5070 Ti Laptop GPU (12 GB) and Intel Core 7 240H, 16 CPU threads. Raw results, no throttling or power-limit correction.
+
+- CUDA, GPU only: **~171,000 phrases/s** (10 s run); GUI peak **198,704 phrases/s**.
+- CUDA + CPU: **~143,000 phrases/s**.
+- CPU, 16 threads: **~6,200 phrases/s**.
+- OpenCL: **~1,030,000 phrases/s** with a suffix filter (1 s run, 24-word seed).
+
+With a suffix filter, CUDA reaches **~417,000 phrases/s**; only matching addresses are kept.
+
 ## Run
 
 Windows 10/11 x64. No .NET or Windows App SDK installation required — the build is self-contained.
