@@ -22,12 +22,17 @@ TON address generator for CUDA, OpenCL and CPU. Supports 12- and 24-word seed ph
 
 ## Performance
 
-Measured on an NVIDIA GeForce RTX 5070 Ti Laptop GPU (12 GB) and Intel Core 7 240H, 16 CPU threads.
+Measured on an NVIDIA GeForce RTX 5070 Ti Laptop GPU (12 GB) and Intel Core 7 240H, 16 CPU threads. Numbers vary between runs; the 10 s GPU run did not throttle.
 
-- CUDA, GPU only: **198,704 phrases/s** (10 s run; the GPU did not throttle).
-- CUDA + CPU: **163,848 phrases/s** (14 s run).
-- CPU, 16 threads: **8,263 phrases/s** (17 s run).
-- OpenCL: **1,029,899 phrases/s** with a suffix filter (1 s run, 24-word seed).
+The UI counter `phrases/s` shows generation attempts, not unique seed phrases. For 12-word seeds one attempt produces one seed phrase:
+
+| Mode (12 words) | Phrases/s | Addresses/s |
+|---|---:|---:|
+| CUDA, GPU only | 198,704 | 198,704 |
+| CUDA + CPU | 163,848 | 163,848 |
+| CPU, 16 threads | 8,263 | 8,263 |
+
+For 24-word seeds the GPU does **493,766 attempts/s**, but the real seed phrase rate is **~1,600/s** (1,812 addresses/s in this run). Peak attempts can exceed **1,000,000/s** — that is the attempt counter, not the seed phrase rate.
 
 ## Run
 
