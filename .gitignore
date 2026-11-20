@@ -1,0 +1,40 @@
+# Build intermediates
+bin/
+obj/
+.vs/
+.work/
+.cache/
+dist/
+
+# Symbols, libraries and archives
+*.pdb
+*.lib
+*.exp
+*.zip
+
+# Generated data
+found.txt
+opencl_cache/
+
+# Native build artifacts
+*.o
+*.a
+*.obj
+*.cubin
+*.ptx
+
+# Python and local tooling
+__pycache__/
+*.py[cod]
+.pylibs/
+.venv-bench/
+.wheels/
+.tmp/
+
+# IDE and OS
+.vscode/
+.idea/
+*.user
+*.suo
+Thumbs.db
+desktop.ini
