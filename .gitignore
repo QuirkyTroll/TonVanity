@@ -1,0 +1,41 @@
+# Build output
+bin/
+obj/
+.vs/
+.work/
+.cache/
+dist/
+TonVanity/
+
+# Binaries and native build artifacts
+*.exe
+*.dll
+*.pdb
+*.lib
+*.exp
+*.zip
+*.o
+*.a
+*.obj
+*.cubin
+*.ptx
+
+# Generated data
+found.txt
+opencl_cache/
+
+# Python and local tooling
+__pycache__/
+*.py[cod]
+.pylibs/
+.venv-bench/
+.wheels/
+.tmp/
+
+# IDE and OS
+.vscode/
+.idea/
+*.user
+*.suo
+Thumbs.db
+desktop.ini

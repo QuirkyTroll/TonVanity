@@ -1,0 +1,169 @@
+<Window
+    x:Class="TonVanity.UI.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="using:TonVanity.UI"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+    <Grid x:Name="RootGrid" Background="Transparent">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="32" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <Grid
+            x:Name="AppTitleBar"
+            Grid.Row="0"
+            Background="Transparent"
+            ColumnSpacing="12"
+            Padding="32,0,160,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <TextBlock
+                Text="TonVanity"
+                Style="{StaticResource CaptionTextBlockStyle}"
+                FontWeight="SemiBold"
+                VerticalAlignment="Center" />
+            <TextBlock
+                x:Name="BackendText"
+                Grid.Column="1"
+                Text="Бэкенд: —"
+                TextTrimming="CharacterEllipsis"
+                VerticalAlignment="Center" />
+            <TextBlock
+                x:Name="StateText"
+                Grid.Column="2"
+                Text="Ожидание"
+                VerticalAlignment="Center" />
+        </Grid>
+
+        <Grid Grid.Row="1" Padding="16,8,16,16" RowSpacing="12">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <Grid Grid.Row="0" ColumnSpacing="16">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <Grid Grid.Column="0" RowSpacing="8">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+
+                    <ScrollViewer Grid.Row="0" VerticalScrollBarVisibility="Auto">
+                        <StackPanel Spacing="10" Width="300" MaxWidth="300" HorizontalAlignment="Left">
+                            <TextBlock Text="Окончание адреса" />
+                            <TextBox x:Name="SuffixBox" Text="AB" MaxLength="48" MaxWidth="300" PlaceholderText="A-Z a-z 0-9 - _" />
+                            <CheckBox x:Name="CaseCheck" Content="Учитывать регистр" IsChecked="True" />
+                            <TextBlock Text="Версия кошелька" />
+                            <ComboBox x:Name="VersionCombo" SelectedIndex="0" HorizontalAlignment="Stretch" MaxWidth="300">
+                                <ComboBoxItem Content="W5" />
+                                <ComboBoxItem Content="V4R2" />
+                                <ComboBoxItem Content="TGWallet" />
+                            </ComboBox>
+                            <TextBlock Text="Seed-фраза" />
+                            <ComboBox x:Name="WordsCombo" SelectedIndex="0" HorizontalAlignment="Stretch" MaxWidth="300">
+                                <ComboBoxItem Content="12 слов" />
+                                <ComboBoxItem Content="24 слова" />
+                            </ComboBox>
+                            <TextBlock Text="Формат адреса" />
+                            <ComboBox x:Name="FormatCombo" SelectedIndex="0" HorizontalAlignment="Stretch" MaxWidth="300">
+                                <ComboBoxItem Content="UQ (non-bounceable)" />
+                                <ComboBoxItem Content="EQ (bounceable)" />
+                            </ComboBox>
+                            <TextBlock Text="Режим" />
+                            <ComboBox x:Name="ModeCombo" SelectedIndex="1" HorizontalAlignment="Stretch" MaxWidth="300">
+                                <ComboBoxItem Content="CPU" />
+                                <ComboBoxItem Content="CPU+GPU" />
+                                <ComboBoxItem Content="GPU only" />
+                            </ComboBox>
+                            <TextBlock Text="Потоки CPU (0 = все)" />
+                            <NumberBox x:Name="ThreadsBox" Value="0" Minimum="0" Maximum="64" SmallChange="1" MaxWidth="300" SpinButtonPlacementMode="Compact" />
+                            <Grid ColumnSpacing="8" Margin="0,8,0,0" Width="300" MaxWidth="300" HorizontalAlignment="Left">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <Button x:Name="StartButton" Grid.Column="0" Content="Старт" HorizontalAlignment="Stretch" Click="StartButton_Click" />
+                                <Button x:Name="PauseButton" Grid.Column="1" Content="Пауза" HorizontalAlignment="Stretch" Click="PauseButton_Click" IsEnabled="False" />
+                                <Button x:Name="StopButton" Grid.Column="2" Content="Стоп" HorizontalAlignment="Stretch" Click="StopButton_Click" IsEnabled="False" />
+                            </Grid>
+                        </StackPanel>
+                    </ScrollViewer>
+
+                    <StackPanel Grid.Row="1" Spacing="4" Margin="0,8,0,0">
+                        <TextBlock Text="Статистика" FontSize="18" FontWeight="SemiBold" />
+                        <Grid ColumnSpacing="8" RowSpacing="4">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <StackPanel Grid.Row="0" Grid.Column="0">
+                                <TextBlock Text="Попыток" Foreground="{ThemeResource TextFillColorSecondaryBrush}" />
+                                <TextBlock x:Name="AttemptsText" Text="0" FontSize="20" />
+                            </StackPanel>
+                            <StackPanel Grid.Row="0" Grid.Column="1">
+                                <TextBlock Text="Время" Foreground="{ThemeResource TextFillColorSecondaryBrush}" />
+                                <TextBlock x:Name="ElapsedText" Text="00:00:00" FontSize="20" />
+                            </StackPanel>
+                            <StackPanel Grid.Row="1" Grid.Column="0">
+                                <TextBlock Text="Фраз/с" Foreground="{ThemeResource TextFillColorSecondaryBrush}" />
+                                <TextBlock x:Name="SpeedText" Text="0" FontSize="20" />
+                            </StackPanel>
+                            <StackPanel Grid.Row="1" Grid.Column="1">
+                                <TextBlock Text="Адресов/с" Foreground="{ThemeResource TextFillColorSecondaryBrush}" />
+                                <TextBlock x:Name="CandidateSpeedText" Text="0" FontSize="20" />
+                            </StackPanel>
+                        </Grid>
+                    </StackPanel>
+                </Grid>
+
+                <Grid Grid.Column="1" RowSpacing="8">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <Grid Grid.Row="0" ColumnSpacing="8">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="Найденные адреса" FontSize="18" FontWeight="SemiBold" VerticalAlignment="Center" />
+                        <TextBlock x:Name="FoundCountText" Grid.Column="1" Text="Найдено: 0" VerticalAlignment="Center" />
+                    </Grid>
+                    <ListView x:Name="LogList" Grid.Row="1" SelectionMode="None" BorderThickness="1" BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}" CornerRadius="8">
+                        <ListView.ItemTemplate>
+                            <DataTemplate x:DataType="local:FoundItem">
+                                <StackPanel Spacing="4" Padding="8">
+                                    <TextBlock Text="{x:Bind Address}" FontFamily="Consolas" FontWeight="SemiBold" TextWrapping="Wrap" IsTextSelectionEnabled="True" />
+                                    <TextBlock Text="{x:Bind Mnemonic}" TextWrapping="Wrap" IsTextSelectionEnabled="True" Foreground="{ThemeResource TextFillColorSecondaryBrush}" />
+                                    <StackPanel Orientation="Horizontal" Spacing="12">
+                                        <TextBlock Text="{x:Bind VersionLabel}" FontSize="12" />
+                                        <TextBlock Text="{x:Bind FormatLabel}" FontSize="12" />
+                                        <TextBlock Text="{x:Bind BackendLabel}" FontSize="12" />
+                                    </StackPanel>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                </Grid>
+            </Grid>
+
+            <TextBlock x:Name="StatusText" Grid.Row="1" Text="Готово" TextWrapping="Wrap" Foreground="{ThemeResource TextFillColorSecondaryBrush}" />
+        </Grid>
+    </Grid>
+</Window>
