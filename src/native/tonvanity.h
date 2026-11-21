@@ -44,6 +44,7 @@ void  tnv_stop(void* handle);
 int   tnv_poll(void* handle, TnvStats* stats, TnvMatch* matches, int max_matches);
 void  tnv_destroy(void* handle);
 const char* tnv_backend_info(void);
+void  tnv_set_language(int lang); /* 0=English, 1=Russian */
 int   tnv_selftest(char* report, int cap);
 
 #ifdef __cplusplus

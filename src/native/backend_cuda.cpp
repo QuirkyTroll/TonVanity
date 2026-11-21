@@ -165,21 +165,21 @@ static void hex32(const char* s, unsigned char out[32]) {
 CudaEngine* cuda_create(const TnvConfig& cfg, std::string& name, std::string& error) {
     CudaEngine* e = new CudaEngine();
     e->cfg = cfg;
-    if (!e->a.load()) { error = "nvcuda.dll ?? ?????? (??? NVIDIA-????????)"; delete e; return NULL; }
+    if (!e->a.load()) { error = "nvcuda.dll not found (NVIDIA driver required)"; delete e; return NULL; }
     CUresult r = e->a.cuInit(0);
     if (r != CUDA_SUCCESS) { error = errstr(e->a, r); delete e; return NULL; }
     int n = 0;
-    if (e->a.cuDeviceGetCount(&n) != CUDA_SUCCESS || n <= 0) { error = "CUDA-?????????? ?? ???????"; delete e; return NULL; }
+    if (e->a.cuDeviceGetCount(&n) != CUDA_SUCCESS || n <= 0) { error = "No CUDA devices found"; delete e; return NULL; }
     if (e->a.cuDeviceGet(&e->dev, 0) != CUDA_SUCCESS) { error = "cuDeviceGet failed"; delete e; return NULL; }
     e->a.cuDeviceGetAttribute(&e->cc_major, CU_ATTR_CC_MAJOR, e->dev);
     e->a.cuDeviceGetAttribute(&e->cc_minor, CU_ATTR_CC_MINOR, e->dev);
     r = e->a.cuCtxCreate_v2(&e->ctx, 0, e->dev);
     if (r != CUDA_SUCCESS) { error = errstr(e->a, r); delete e; return NULL; }
-    if (!load_module(e)) { error = "?? ??????? ????????? CUDA-??????"; e->a.cuCtxDestroy_v2(e->ctx); delete e; return NULL; }
+    if (!load_module(e)) { error = "Failed to load the CUDA module"; e->a.cuCtxDestroy_v2(e->ctx); delete e; return NULL; }
     if (e->a.cuModuleGetFunction(&e->f12, e->mod, "kn_bip39_12") != CUDA_SUCCESS ||
         e->a.cuModuleGetFunction(&e->fa, e->mod, "kn_ton24_a") != CUDA_SUCCESS ||
         e->a.cuModuleGetFunction(&e->fb, e->mod, "kn_ton24_b") != CUDA_SUCCESS) {
-        error = "CUDA-??????? ?? ???????"; e->a.cuModuleUnload(e->mod); e->a.cuCtxDestroy_v2(e->ctx); delete e; return NULL;
+        error = "CUDA kernels not found"; e->a.cuModuleUnload(e->mod); e->a.cuCtxDestroy_v2(e->ctx); delete e; return NULL;
     }
     if (e->a.cuStreamCreate(&e->stream, 0) != CUDA_SUCCESS) { error = "cuStreamCreate failed"; delete e; return NULL; }
     if (e->a.cuMemAlloc_v2(&e->d_words, TNV_WORD_COUNT * 9) != CUDA_SUCCESS ||
@@ -339,10 +339,10 @@ void cuda_destroy(CudaEngine* e) {
 }
 
 bool cuda_probe(std::string& name, std::string& error) {
-    Cudart a; if (!a.load()) { error = "nvcuda.dll ?? ??????"; return false; }
+    Cudart a; if (!a.load()) { error = "nvcuda.dll not found"; return false; }
     CUresult r = a.cuInit(0);
     if (r != CUDA_SUCCESS) { error = errstr(a, r); return false; }
-    int n = 0; if (a.cuDeviceGetCount(&n) != CUDA_SUCCESS || n <= 0) { error = "??? CUDA-?????????"; return false; }
+    int n = 0; if (a.cuDeviceGetCount(&n) != CUDA_SUCCESS || n <= 0) { error = "No CUDA devices found"; return false; }
     CUdevice d; a.cuDeviceGet(&d, 0);
     int maj = 0, min = 0; a.cuDeviceGetAttribute(&maj, CU_ATTR_CC_MAJOR, d); a.cuDeviceGetAttribute(&min, CU_ATTR_CC_MINOR, d);
     char b[64]; snprintf(b, sizeof(b), "CUDA sm_%d%d", maj, min); name = b;

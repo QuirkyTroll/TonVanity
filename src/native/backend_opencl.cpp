@@ -311,10 +311,10 @@ static void save_program(OpenCLEngine* e, const std::string& path) {
 OpenCLEngine* opencl_create(const TnvConfig& cfg, std::string& name, std::string& error) {
     OpenCLEngine* e = new OpenCLEngine();
     e->cfg = cfg;
-    if (!e->a.load()) { error = "OpenCL.dll не найден (нужен драйвер OpenCL)"; delete e; return NULL; }
+    if (!e->a.load()) { error = "OpenCL.dll not found (OpenCL driver required)"; delete e; return NULL; }
     std::vector<OclDevice> devs = enumerate(e->a);
     OclDevice* d = pick_device(devs);
-    if (!d) { error = "OpenCL-устройства не найдены"; delete e; return NULL; }
+    if (!d) { error = "No OpenCL devices found"; delete e; return NULL; }
     e->dev = d->dev;
     cl_int err = 0;
     e->ctx = e->a.clCreateContext(NULL, 1, &e->dev, NULL, NULL, &err);
@@ -371,7 +371,7 @@ OpenCLEngine* opencl_create(const TnvConfig& cfg, std::string& name, std::string
         e->fb = e->a.clCreateKernel(e->prog, "kn_ton24_b", &err);
     }
     if (!e->f12 || !e->fa || !e->fb) {
-        error = "OpenCL-ядра не найдены";
+        error = "OpenCL kernels not found";
         e->a.clReleaseKernel(e->f12); e->a.clReleaseKernel(e->fa); e->a.clReleaseKernel(e->fb);
         e->a.clReleaseProgram(e->prog); e->a.clReleaseCommandQueue(e->q); e->a.clReleaseContext(e->ctx);
         delete e; return NULL;
@@ -545,10 +545,10 @@ void opencl_destroy(OpenCLEngine* e) {
 
 bool opencl_probe(std::string& name, std::string& error) {
     OclApi a;
-    if (!a.load()) { error = "OpenCL.dll не найден"; return false; }
+    if (!a.load()) { error = "OpenCL.dll not found"; return false; }
     std::vector<OclDevice> devs = enumerate(a);
     OclDevice* d = pick_device(devs);
-    if (!d) { error = "OpenCL-устройства не найдены"; return false; }
+    if (!d) { error = "No OpenCL devices found"; return false; }
     name = "OpenCL " + d->name;
     return true;
 }

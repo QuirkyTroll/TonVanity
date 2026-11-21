@@ -41,6 +41,11 @@ internal static class Native
     [DllImport(Library, CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
     internal static extern IntPtr tnv_backend_info();
 
+    [DllImport(Library, CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
+    internal static extern void tnv_set_language(int lang);
+
+    internal static void SetLanguage(int lang) => tnv_set_language(lang);
+
     internal static string BackendInfo()
     {
         IntPtr ptr = tnv_backend_info();

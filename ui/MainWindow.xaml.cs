@@ -30,6 +30,13 @@ public sealed partial class MainWindow : Window
     public MainWindow()
     {
         InitializeComponent();
+        try
+        {
+            Native.SetLanguage(0);
+        }
+        catch
+        {
+        }
         Title = "TonVanity";
         string iconPath = System.IO.Path.Combine(AppContext.BaseDirectory, "app.ico");
         if (System.IO.File.Exists(iconPath))
@@ -160,12 +167,12 @@ public sealed partial class MainWindow : Window
             await Task.Run(() => Native.tnv_stop(_handle));
             _running = false;
             _paused = true;
-            StateText.Text = "Пауза";
-            StartButton.Content = "Продолжить";
+            StateText.Text = "Paused";
+            StartButton.Content = "Resume";
             StartButton.IsEnabled = true;
             PauseButton.IsEnabled = false;
             StopButton.IsEnabled = true;
-            StatusText.Text = "Поиск приостановлен";
+            StatusText.Text = "Search paused";
         }
         catch (Exception ex)
         {
@@ -199,10 +206,10 @@ public sealed partial class MainWindow : Window
             SpeedText.Text = "0";
             CandidateSpeedText.Text = "0";
             ElapsedText.Text = "00:00:00";
-            BackendText.Text = "Бэкенд: —";
-            StateText.Text = "Остановлено";
-            StatusText.Text = "Поиск остановлен";
-            StartButton.Content = "Старт";
+            BackendText.Text = "Backend: —";
+            StateText.Text = "Stopped";
+            StatusText.Text = "Search stopped";
+            StartButton.Content = "Start";
             SetIdleControls();
         }
         catch (Exception ex)
@@ -220,7 +227,7 @@ public sealed partial class MainWindow : Window
         string suffix = SuffixBox.Text.Trim();
         if (!ValidSuffix(suffix))
         {
-            StatusText.Text = "Окончание: 1–48 символов A-Z, a-z, 0-9, - или _";
+            StatusText.Text = "Suffix: 1–48 characters A-Z, a-z, 0-9, - or _";
             return;
         }
 
@@ -229,8 +236,8 @@ public sealed partial class MainWindow : Window
         StartButton.IsEnabled = false;
         PauseButton.IsEnabled = false;
         StopButton.IsEnabled = true;
-        StateText.Text = "Инициализация";
-        StatusText.Text = "Инициализация бэкенда, первый запуск OpenCL может занять до 40 секунд";
+        StateText.Text = "Initializing";
+        StatusText.Text = "Initializing backend; the first OpenCL start can take up to 40 seconds";
         try
         {
             if (_handle == IntPtr.Zero)
@@ -247,7 +254,7 @@ public sealed partial class MainWindow : Window
                 _handle = Native.tnv_create(ref config);
                 if (_handle == IntPtr.Zero)
                 {
-                    StatusText.Text = "Не удалось создать сессию: проверьте окончание и параметры";
+                    StatusText.Text = "Failed to create session: check the suffix and settings";
                     SetIdleControls();
                     SetConfigEnabled(true);
                     return;
@@ -260,7 +267,7 @@ public sealed partial class MainWindow : Window
             int result = await Task.Run(() => Native.tnv_start(_handle));
             if (result != 0)
             {
-                StatusText.Text = "Не удалось запустить поиск";
+                StatusText.Text = "Failed to start search";
                 DestroyHandle();
                 SetIdleControls();
                 SetConfigEnabled(true);
@@ -269,9 +276,9 @@ public sealed partial class MainWindow : Window
 
             _running = true;
             _paused = false;
-            StateText.Text = "Работает";
-            StatusText.Text = "Поиск запущен";
-            StartButton.Content = "Старт";
+            StateText.Text = "Running";
+            StatusText.Text = "Search running";
+            StartButton.Content = "Start";
             StartButton.IsEnabled = false;
             PauseButton.IsEnabled = true;
             StopButton.IsEnabled = true;
@@ -279,14 +286,14 @@ public sealed partial class MainWindow : Window
         }
         catch (DllNotFoundException)
         {
-            StatusText.Text = "tonvanity.dll не найден рядом с TonVanity.exe";
+            StatusText.Text = "tonvanity.dll not found next to TonVanity.exe";
             DestroyHandle();
             SetIdleControls();
             SetConfigEnabled(true);
         }
         catch (BadImageFormatException)
         {
-            StatusText.Text = "tonvanity.dll имеет неверную разрядность";
+            StatusText.Text = "tonvanity.dll has the wrong architecture";
             DestroyHandle();
             SetIdleControls();
             SetConfigEnabled(true);
@@ -310,22 +317,22 @@ public sealed partial class MainWindow : Window
         StartButton.IsEnabled = false;
         PauseButton.IsEnabled = false;
         StopButton.IsEnabled = true;
-        StateText.Text = "Инициализация";
+        StateText.Text = "Initializing";
         try
         {
             int result = await Task.Run(() => Native.tnv_start(_handle));
             if (result != 0)
             {
-                StatusText.Text = "Не удалось возобновить поиск";
-                StateText.Text = "Пауза";
+                StatusText.Text = "Failed to resume search";
+                StateText.Text = "Paused";
                 StartButton.IsEnabled = true;
                 PauseButton.IsEnabled = false;
                 return;
             }
             _running = true;
             _paused = false;
-            StateText.Text = "Работает";
-            StatusText.Text = "Поиск возобновлён";
+            StateText.Text = "Running";
+            StatusText.Text = "Search resumed";
             StartButton.IsEnabled = false;
             PauseButton.IsEnabled = true;
             _timer.Start();
@@ -333,7 +340,7 @@ public sealed partial class MainWindow : Window
         catch (Exception ex)
         {
             StatusText.Text = ex.Message;
-            StateText.Text = "Пауза";
+            StateText.Text = "Paused";
             StartButton.IsEnabled = true;
         }
         finally
@@ -365,7 +372,7 @@ public sealed partial class MainWindow : Window
                 _found.Add(item);
                 LogList.ScrollIntoView(item);
             }
-            FoundCountText.Text = $"Найдено: {_found.Count}";
+            FoundCountText.Text = $"Found: {_found.Count}";
             AttemptsText.Text = (_baseAttempts + stats.attempts).ToString("N0");
             SpeedText.Text = stats.attempts_per_sec.ToString("N0");
             CandidateSpeedText.Text = stats.candidates_per_sec.ToString("N0");
@@ -373,9 +380,9 @@ public sealed partial class MainWindow : Window
             string backend = stats.BackendName();
             if (!string.IsNullOrWhiteSpace(backend))
             {
-                BackendText.Text = $"Бэкенд: {backend}";
+                BackendText.Text = $"Backend: {backend}";
             }
-            StateText.Text = stats.backend_state == 2 ? "Fallback" : _paused ? "Пауза" : "Работает";
+            StateText.Text = stats.backend_state == 2 ? "Fallback" : _paused ? "Paused" : "Running";
             string message = stats.Message();
             if (!string.IsNullOrWhiteSpace(message))
             {
@@ -427,7 +434,7 @@ public sealed partial class MainWindow : Window
         StartButton.IsEnabled = true;
         PauseButton.IsEnabled = false;
         StopButton.IsEnabled = false;
-        StartButton.Content = "Старт";
+        StartButton.Content = "Start";
         SetConfigEnabled(true);
     }
 

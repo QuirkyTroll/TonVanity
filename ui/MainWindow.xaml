@@ -31,13 +31,13 @@
             <TextBlock
                 x:Name="BackendText"
                 Grid.Column="1"
-                Text="Бэкенд: —"
+                Text="Backend: —"
                 TextTrimming="CharacterEllipsis"
                 VerticalAlignment="Center" />
             <TextBlock
                 x:Name="StateText"
                 Grid.Column="2"
-                Text="Ожидание"
+                Text="Idle"
                 VerticalAlignment="Center" />
         </Grid>
 
@@ -61,32 +61,32 @@
 
                     <ScrollViewer Grid.Row="0" VerticalScrollBarVisibility="Auto">
                         <StackPanel Spacing="10" Width="300" MaxWidth="300" HorizontalAlignment="Left">
-                            <TextBlock Text="Окончание адреса" />
+                            <TextBlock Text="Address suffix" />
                             <TextBox x:Name="SuffixBox" Text="AB" MaxLength="48" MaxWidth="300" PlaceholderText="A-Z a-z 0-9 - _" />
-                            <CheckBox x:Name="CaseCheck" Content="Учитывать регистр" IsChecked="True" />
-                            <TextBlock Text="Версия кошелька" />
+                            <CheckBox x:Name="CaseCheck" Content="Case-sensitive" IsChecked="True" />
+                            <TextBlock Text="Wallet version" />
                             <ComboBox x:Name="VersionCombo" SelectedIndex="0" HorizontalAlignment="Stretch" MaxWidth="300">
                                 <ComboBoxItem Content="W5" />
                                 <ComboBoxItem Content="V4R2" />
                                 <ComboBoxItem Content="TGWallet" />
                             </ComboBox>
-                            <TextBlock Text="Seed-фраза" />
+                            <TextBlock Text="Seed phrase" />
                             <ComboBox x:Name="WordsCombo" SelectedIndex="0" HorizontalAlignment="Stretch" MaxWidth="300">
-                                <ComboBoxItem Content="12 слов" />
-                                <ComboBoxItem Content="24 слова" />
+                                <ComboBoxItem Content="12 words" />
+                                <ComboBoxItem Content="24 words" />
                             </ComboBox>
-                            <TextBlock Text="Формат адреса" />
+                            <TextBlock Text="Address format" />
                             <ComboBox x:Name="FormatCombo" SelectedIndex="0" HorizontalAlignment="Stretch" MaxWidth="300">
                                 <ComboBoxItem Content="UQ (non-bounceable)" />
                                 <ComboBoxItem Content="EQ (bounceable)" />
                             </ComboBox>
-                            <TextBlock Text="Режим" />
+                            <TextBlock Text="Mode" />
                             <ComboBox x:Name="ModeCombo" SelectedIndex="1" HorizontalAlignment="Stretch" MaxWidth="300">
                                 <ComboBoxItem Content="CPU" />
                                 <ComboBoxItem Content="CPU+GPU" />
                                 <ComboBoxItem Content="GPU only" />
                             </ComboBox>
-                            <TextBlock Text="Потоки CPU (0 = все)" />
+                            <TextBlock Text="CPU threads (0 = all)" />
                             <NumberBox x:Name="ThreadsBox" Value="0" Minimum="0" Maximum="64" SmallChange="1" MaxWidth="300" SpinButtonPlacementMode="Compact" />
                             <Grid ColumnSpacing="8" Margin="0,8,0,0" Width="300" MaxWidth="300" HorizontalAlignment="Left">
                                 <Grid.ColumnDefinitions>
@@ -94,15 +94,15 @@
                                     <ColumnDefinition Width="*" />
                                     <ColumnDefinition Width="*" />
                                 </Grid.ColumnDefinitions>
-                                <Button x:Name="StartButton" Grid.Column="0" Content="Старт" HorizontalAlignment="Stretch" Click="StartButton_Click" />
-                                <Button x:Name="PauseButton" Grid.Column="1" Content="Пауза" HorizontalAlignment="Stretch" Click="PauseButton_Click" IsEnabled="False" />
-                                <Button x:Name="StopButton" Grid.Column="2" Content="Стоп" HorizontalAlignment="Stretch" Click="StopButton_Click" IsEnabled="False" />
+                                <Button x:Name="StartButton" Grid.Column="0" Content="Start" HorizontalAlignment="Stretch" Click="StartButton_Click" />
+                                <Button x:Name="PauseButton" Grid.Column="1" Content="Pause" HorizontalAlignment="Stretch" Click="PauseButton_Click" IsEnabled="False" />
+                                <Button x:Name="StopButton" Grid.Column="2" Content="Stop" HorizontalAlignment="Stretch" Click="StopButton_Click" IsEnabled="False" />
                             </Grid>
                         </StackPanel>
                     </ScrollViewer>
 
                     <StackPanel Grid.Row="1" Spacing="4" Margin="0,8,0,0">
-                        <TextBlock Text="Статистика" FontSize="18" FontWeight="SemiBold" />
+                        <TextBlock Text="Statistics" FontSize="18" FontWeight="SemiBold" />
                         <Grid ColumnSpacing="8" RowSpacing="4">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*" />
@@ -113,19 +113,19 @@
                                 <RowDefinition Height="Auto" />
                             </Grid.RowDefinitions>
                             <StackPanel Grid.Row="0" Grid.Column="0">
-                                <TextBlock Text="Попыток" Foreground="{ThemeResource TextFillColorSecondaryBrush}" />
+                                <TextBlock Text="Attempts" Foreground="{ThemeResource TextFillColorSecondaryBrush}" />
                                 <TextBlock x:Name="AttemptsText" Text="0" FontSize="20" />
                             </StackPanel>
                             <StackPanel Grid.Row="0" Grid.Column="1">
-                                <TextBlock Text="Время" Foreground="{ThemeResource TextFillColorSecondaryBrush}" />
+                                <TextBlock Text="Time" Foreground="{ThemeResource TextFillColorSecondaryBrush}" />
                                 <TextBlock x:Name="ElapsedText" Text="00:00:00" FontSize="20" />
                             </StackPanel>
                             <StackPanel Grid.Row="1" Grid.Column="0">
-                                <TextBlock Text="Фраз/с" Foreground="{ThemeResource TextFillColorSecondaryBrush}" />
+                                <TextBlock Text="Phrases/s" Foreground="{ThemeResource TextFillColorSecondaryBrush}" />
                                 <TextBlock x:Name="SpeedText" Text="0" FontSize="20" />
                             </StackPanel>
                             <StackPanel Grid.Row="1" Grid.Column="1">
-                                <TextBlock Text="Адресов/с" Foreground="{ThemeResource TextFillColorSecondaryBrush}" />
+                                <TextBlock Text="Addresses/s" Foreground="{ThemeResource TextFillColorSecondaryBrush}" />
                                 <TextBlock x:Name="CandidateSpeedText" Text="0" FontSize="20" />
                             </StackPanel>
                         </Grid>
@@ -142,8 +142,8 @@
                             <ColumnDefinition Width="*" />
                             <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
-                        <TextBlock Text="Найденные адреса" FontSize="18" FontWeight="SemiBold" VerticalAlignment="Center" />
-                        <TextBlock x:Name="FoundCountText" Grid.Column="1" Text="Найдено: 0" VerticalAlignment="Center" />
+                        <TextBlock Text="Found addresses" FontSize="18" FontWeight="SemiBold" VerticalAlignment="Center" />
+                        <TextBlock x:Name="FoundCountText" Grid.Column="1" Text="Found: 0" VerticalAlignment="Center" />
                     </Grid>
                     <ListView x:Name="LogList" Grid.Row="1" SelectionMode="None" BorderThickness="1" BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}" CornerRadius="8">
                         <ListView.ItemTemplate>
@@ -163,7 +163,7 @@
                 </Grid>
             </Grid>
 
-            <TextBlock x:Name="StatusText" Grid.Row="1" Text="Готово" TextWrapping="Wrap" Foreground="{ThemeResource TextFillColorSecondaryBrush}" />
+            <TextBlock x:Name="StatusText" Grid.Row="1" Text="Ready" TextWrapping="Wrap" Foreground="{ThemeResource TextFillColorSecondaryBrush}" />
         </Grid>
     </Grid>
 </Window>

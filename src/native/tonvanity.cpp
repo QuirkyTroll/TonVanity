@@ -54,6 +54,16 @@ static void set_msg(Session* s, const char* fmt, ...) {
     s->message = buf;
 }
 
+static int g_lang = 0;
+
+static const char* tr(const char* en, const char* ru) {
+    return g_lang == 1 ? ru : en;
+}
+
+void tnv_set_language(int lang) {
+    g_lang = (lang == 1) ? 1 : 0;
+}
+
 void* tnv_create(const TnvConfig* cfg) {
     if (!cfg) return NULL;
     if (cfg->wallet_version < 0 || cfg->wallet_version > 2) return NULL;
@@ -64,7 +74,7 @@ void* tnv_create(const TnvConfig* cfg) {
     Session* s = new Session();
     s->cfg = *cfg;
     s->backend_state = 0;
-    s->message = "?????? ? ??????.";
+    s->message = tr("Ready.", "Готово.");
     return s;
 }
 
@@ -105,9 +115,9 @@ int tnv_start(void* handle) {
                 start_cpu_threads(s, n);
                 cpu_started = true;
                 s->backend_name += " + CPU " + std::to_string(n) + "t";
-                set_msg(s, "Поиск: CUDA + CPU (%d потоков).", n);
+                set_msg(s, tr("Search: CUDA + CPU (%d threads).", "Поиск: CUDA + CPU (%d потоков)."), n);
             } else {
-                set_msg(s, "Поиск: CUDA.");
+                set_msg(s, tr("Search: CUDA.", "Поиск: CUDA."));
             }
         } else {
             s->ocl = opencl_create(s->cfg, oname, oerr);
@@ -120,14 +130,15 @@ int tnv_start(void* handle) {
                     start_cpu_threads(s, n);
                     cpu_started = true;
                     s->backend_name += " + CPU " + std::to_string(n) + "t";
-                    set_msg(s, "Поиск: OpenCL + CPU (%d потоков).", n);
+                    set_msg(s, tr("Search: OpenCL + CPU (%d threads).", "Поиск: OpenCL + CPU (%d потоков)."), n);
                 } else {
-                    set_msg(s, "Поиск: OpenCL.");
+                    set_msg(s, tr("Search: OpenCL.", "Поиск: OpenCL."));
                 }
             } else {
                 s->backend_state = 2;
                 s->backend_name = "CPU " + std::to_string(n) + "t";
-                set_msg(s, "GPU недоступен (CUDA: %s; OpenCL: %s). Fallback на CPU (%d потоков).",
+                set_msg(s, tr("GPU unavailable (CUDA: %s; OpenCL: %s). Falling back to CPU (%d threads).",
+                             "GPU недоступен (CUDA: %s; OpenCL: %s). Fallback на CPU (%d потоков)."),
                         cerr.c_str(), oerr.c_str(), n);
                 start_cpu_threads(s, n);
                 cpu_started = true;
@@ -136,7 +147,7 @@ int tnv_start(void* handle) {
     } else {
         start_cpu_threads(s, n);
         cpu_started = true;
-        set_msg(s, "Поиск на CPU (%d потоков).", n);
+        set_msg(s, tr("Search: CPU (%d threads).", "Поиск на CPU (%d потоков)."), n);
     }
     (void)cpu_started;
     s->start_time = std::chrono::steady_clock::now();
@@ -200,7 +211,7 @@ const char* tnv_backend_info(void) {
     static std::string info;
     int n = (int)std::thread::hardware_concurrency();
     if (n <= 0) n = 4;
-    info = "CPU " + std::to_string(n) + " потоков";
+    info = "CPU " + std::to_string(n) + tr(" threads", " потоков");
     std::string cname, cerr;
     if (cuda_probe(cname, cerr)) info += "; " + cname;
     else info += "; CUDA: " + cerr;
