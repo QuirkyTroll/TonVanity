@@ -1,6 +1,6 @@
 # TonVanity — GPU TON address generator
 
-![TonVanity](screenshot.png)
+![TonVanity](screenshot-ui.png)
 
 TON address generator for CUDA, OpenCL and CPU. Supports 12- and 24-word seed phrases and W5, V4R2 and TGWallet wallets.
 
