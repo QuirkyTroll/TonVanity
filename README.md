@@ -38,7 +38,7 @@ For 24-word seeds the GPU does **493,766 attempts/s**, but the real seed phrase 
 
 Windows 10/11 x64. No .NET or Windows App SDK installation required — the build is self-contained.
 
-- Console: [TonVanity.exe](TonVanity.exe)
+- Console: [TonVanity.exe](TonVanity.exe) — language is switched with menu item 0.
 - GUI: [TonVanity WinUI/TonVanity.exe](TonVanity%20WinUI/TonVanity.exe)
 
 ## Build
